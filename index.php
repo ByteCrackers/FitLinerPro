@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="">
     <title>Document</title>
-    <link rel="stylesheet" href="./assets/css/output.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 
@@ -43,7 +43,7 @@
 
     <p class="mt-10 text-center text-sm text-gray-500">
       Not a member?
-      <a href="#" class="font-semibold leading-6 text-orange-600 hover:text-orange-400">Register for new membership</a>
+      <a href="./public/register.php" class="font-semibold leading-6 text-orange-600 hover:text-orange-400">Register for new membership</a>
     </p>
   </div>
 </div>
