@@ -1,22 +1,37 @@
+<?php
+session_start(); // Start the session
+
+// Check if there's an error message in the session and store it in a variable
+$error = isset($_SESSION['error']) ? $_SESSION['error'] : '';
+
+// Clear the error message from the session after displaying it
+unset($_SESSION['error']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="">
-    <title>Document</title>
+    <title>FitLiner Pro - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 
-<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+<div class="flex flex-col justify-center min-h-full px-6 py-12 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-    <img class="mx-auto h-12 w-auto" src="./assets/images/logo.png" alt="FitLiner Pro">
-    <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
+    <img class="w-auto h-12 mx-auto" src="./assets/images/logo.png" alt="FitLiner Pro">
+    <h2 class="mt-10 text-2xl font-bold leading-9 tracking-tight text-center text-gray-900">Sign in to your account</h2>
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form class="space-y-6" action="#" method="POST">
+    <!-- Display error message if any -->
+    <?php if (!empty($error)): ?>
+      <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+        <?= $error ?>
+      </div>
+    <?php endif; ?>
+
+    <form class="space-y-6" method="POST" action="./controllers/AuthController.php">
       <div>
         <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
         <div class="mt-2">
@@ -41,7 +56,7 @@
       </div>
     </form>
 
-    <p class="mt-10 text-center text-sm text-gray-500">
+    <p class="mt-10 text-sm text-center text-gray-500">
       Not a member?
       <a href="./public/register.php" class="font-semibold leading-6 text-orange-600 hover:text-orange-400">Register for new membership</a>
     </p>
