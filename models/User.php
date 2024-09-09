@@ -34,25 +34,92 @@ class User {
         return false;
     }
 
-    public function register($name, $email, $password) {
+    public function register(
+        $email, $password, $firstName, $lastName, $nameWithInitials, $sex, $maritalStatus, $address, 
+        $birthday, $age, $height, $weight, $about, $exerciseLocation, $participatedInSports, $currentlyDoingSports, $exerciseDuration
+    ) {
         // Check if email already exists
         if ($this->getUserByEmail($email)) {
             $this->lastError = "Email already exists";
             return false;
         }
-
+    
+        // Hash the password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        $stmt = $this->conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $name, $email, $hashedPassword);
-
-        if ($stmt->execute()) {
+        $role = "user";
+    
+        // Convert arrays to JSON
+        $exerciseLocationJson = json_encode($exerciseLocation);
+        $participatedInSportsJson = json_encode($participatedInSports);
+        $currentlyDoingSportsJson = json_encode($currentlyDoingSports);
+    
+        // Begin transaction
+        $this->conn->begin_transaction();
+    
+        try {
+            // Insert into users table
+            $stmt = $this->conn->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
+            if (!$stmt) {
+                throw new Exception("Failed to prepare statement: " . $this->conn->error);
+            }
+            $stmt->bind_param("ssss", $firstName, $email, $hashedPassword, $role);
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to insert user into users table: " . $stmt->error);
+            }
+    
+            // Get the last inserted user ID
+            $userId = $this->conn->insert_id;
+    
+            // Insert into membership_registration table
+            $stmt = $this->conn->prepare("
+                INSERT INTO membership_registration 
+                (id, first_name, last_name, name_with_initials, sex, marital_status, address, birthday, age, height, weight, about, exercise_location, participated_in_sports, currently_doing_sports, exercise_duration)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ");
+            if (!$stmt) {
+                throw new Exception("Failed to prepare statement: " . $this->conn->error);
+            }
+    
+            // Match the number of types and variables
+            $stmt->bind_param(
+                "isssssssssssssss",
+                $userId, 
+                $firstName, 
+                $lastName, 
+                $nameWithInitials, 
+                $sex, 
+                $maritalStatus, 
+                $address, 
+                $birthday, 
+                $age, 
+                $height, 
+                $weight, 
+                $about, 
+                $exerciseLocationJson, 
+                $participatedInSportsJson, 
+                $currentlyDoingSportsJson, 
+                $exerciseDuration
+            );
+    
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to insert user details into membership_registration table: " . $stmt->error);
+            }
+    
+            // Commit transaction
+            $this->conn->commit();
             return true;
-        } else {
-            $this->lastError = "Registration failed: " . $stmt->error;
+    
+        } catch (Exception $e) {
+            // Rollback transaction in case of error
+            $this->conn->rollback();
+            $this->lastError = $e->getMessage();
             return false;
         }
     }
+    
+    
+    
+    
 
     public function isLoggedIn() {
         return isset($_SESSION['user_id']);

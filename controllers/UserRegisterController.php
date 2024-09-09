@@ -7,21 +7,6 @@ require_once '../models/User.php';
 $userModel = new User($conn);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $action = $_POST['action'] ?? 'login';
-
-    if ($action == 'login') {
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
-
-        if ($userModel->login($email, $password)) {
-            header('Location: ../public/dashboard.php');
-            exit();
-        } else {
-            $_SESSION['error'] = 'Login failed: ' . $userModel->getLastError();
-            header("Location: ../index.php");
-            exit();
-        }
-    } elseif ($action == 'register') {
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
         $firstName = $_POST['first-name'] ?? '';
@@ -29,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $nameWithInitials = $_POST['name-with-initials'] ?? '';
         $sex = $_POST['sex'] ?? '';
         $maritalStatus = $_POST['marital-status'] ?? '';
-        $address = $_POST['street-address'] ?? '';
+        $address = $_POST['address'] ?? '';
         $birthday = $_POST['birthday'] ?? '';
         $age = $_POST['age'] ?? '';
         $height = $_POST['height'] ?? '';
@@ -49,6 +34,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Location: ../public/register.php");
             exit();
         }
-    }
 }
 ?>
