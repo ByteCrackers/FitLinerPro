@@ -21,8 +21,14 @@ class User {
         $user = $this->getUserByEmail($email);
         
         if ($user) {
+            if ($user['status'] === 'Inactive') {
+                $this->lastError = "Your account is inactive. Please contact support.";
+                return false;
+            }
+            
             if (password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_role'] = $user['role']; 
                 return true;
             } else {
                 $this->lastError = "Invalid password";
@@ -33,6 +39,8 @@ class User {
         
         return false;
     }
+    
+    
 
     public function register(
         $email, $password, $firstName, $lastName, $nameWithInitials, $sex, $maritalStatus, $address, 
@@ -47,6 +55,7 @@ class User {
         // Hash the password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $role = "user";
+        $status = "Inactive";
     
         // Convert arrays to JSON
         $exerciseLocationJson = json_encode($exerciseLocation);
@@ -58,11 +67,11 @@ class User {
     
         try {
             // Insert into users table
-            $stmt = $this->conn->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
+            $stmt = $this->conn->prepare("INSERT INTO users (name, email, password, role, status) VALUES (?, ?, ?, ?, ?)");
             if (!$stmt) {
                 throw new Exception("Failed to prepare statement: " . $this->conn->error);
             }
-            $stmt->bind_param("ssss", $firstName, $email, $hashedPassword, $role);
+            $stmt->bind_param("sssss", $firstName, $email, $hashedPassword, $role, $status);
             if (!$stmt->execute()) {
                 throw new Exception("Failed to insert user into users table: " . $stmt->error);
             }

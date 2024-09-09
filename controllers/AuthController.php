@@ -14,7 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $password = $_POST['password'] ?? '';
 
         if ($userModel->login($email, $password)) {
-            header('Location: ../public/dashboard.php');
+            $userRole = $_SESSION['user_role'] ?? 'user'; 
+            if ($userRole === 'admin') {
+                header('Location: ../public/admin_dashboard.php');
+            } else {
+                header('Location: ../public/user_dashboard.php');
+            }
             exit();
         } else {
             $_SESSION['error'] = 'Login failed: ' . $userModel->getLastError();
