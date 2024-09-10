@@ -13,6 +13,9 @@ switch ($active) {
     case 'inbox':
         $url = "../views/admins/inbox.php";
         break;
+    case 'add_message':
+        $url = "addNew_message.php";
+        break;
     case 'attendance':
         $url = "../views/admins/attendace.php";
         break;
