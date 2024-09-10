@@ -114,6 +114,26 @@ class User {
                 throw new Exception("Failed to insert user details into membership_registration table: " . $stmt->error);
             }
     
+            // Insert into payment table with status as 'Due'
+            $stmt = $this->conn->prepare("INSERT INTO payment (id, status) VALUES (?, 'Due')");
+            if (!$stmt) {
+                throw new Exception("Failed to prepare statement for payment table: " . $this->conn->error);
+            }
+            $stmt->bind_param("i", $userId);
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to insert into payment table: " . $stmt->error);
+            }
+    
+            // Insert into attendance table with attendance as 0
+            $stmt = $this->conn->prepare("INSERT INTO attendance (user_id, attendance) VALUES (?, 0)");
+            if (!$stmt) {
+                throw new Exception("Failed to prepare statement for attendance table: " . $this->conn->error);
+            }
+            $stmt->bind_param("i", $userId);
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to insert into attendance table: " . $stmt->error);
+            }
+    
             // Commit transaction
             $this->conn->commit();
             return true;
@@ -125,6 +145,7 @@ class User {
             return false;
         }
     }
+    
     
     
     
