@@ -1,27 +1,52 @@
 <?php
-session_start(); 
+// Include database configuration
+include '../config.php';
 
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'user') {
-    header('Location: ../index.php');
-    exit();
+// Get message ID from the URL
+$messageId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+
+// Fetch message details from the database
+if ($messageId > 0) {
+    $sql = "SELECT id, date, sender, message FROM message WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $messageId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $message = $result->fetch_assoc();
+    } else {
+        $error = "Message not found.";
+    }
+
+    $stmt->close();
+} else {
+    $error = "Invalid message ID.";
 }
 
+$conn->close();
+?>
+
+
+
+<?php
 $active = isset($_GET['active']) ? $_GET['active'] : '';
 
 $active = htmlspecialchars($active, ENT_QUOTES, 'UTF-8');
 
 switch ($active) {
     case 'schedules':
-        $url = "../views/users/shedules.php";
+        $url = "../views/users/viewShedules.php";
         break;
     case 'inbox':
         $url = "../views/users/inbox.php";
         break;
     default:
-        $url = "../views/users/shedules.php";
+        $url = "../views/users/viewShedules.php";
         break;
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -31,20 +56,27 @@ switch ($active) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Document</title>
 </head>
 
 <body>
-<nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start rtl:justify-end">
-                    
+
                     <a href="../index.php" class="flex ms-2 md:me-24">
                         <img src="../assets/images/logo.png" class="h-8 me-3" alt="FitLiner Logo" />
                         <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-orange-600">FitLiner Pro</span>
                     </a>
                 </div>
+                <!-- Button to toggle sidebar -->
+                <button id="sidebarToggle" class="p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-6 h-6 text-gray-500 dark:text-gray-400" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 6h15M4.5 12h15M4.5 18h15" />
+                    </svg>
+                </button>
             </div>
         </div>
     </nav>
@@ -57,8 +89,7 @@ switch ($active) {
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                         </svg>
-
-                        <span class="flex-1 ms-3 whitespace-nowrap">Shedules</span>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Schedules</span>
                     </a>
                 </li>
                 <li>
@@ -83,10 +114,36 @@ switch ($active) {
         </div>
     </aside>
     <div class="p-4 sm:ml-64">
+        
         <div class="p-4 mt-14">
-            <?php include $url; ?>
+            <div class="flex flex-col items-end">
+                <a href="user_dashboard.php?active=inbox">
+                    <button type="button" class="text-white bg-blue-500 hover:bg-blue-800 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700">
+                        Back to Message List
+                    </button>
+                </a>
+            </div>
+
+            <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md bg-clip-border rounded-xl">
+                <?php if (isset($error)): ?>
+                    <div class="p-4 text-red-600">
+                        <?php echo htmlspecialchars($error); ?>
+                    </div>
+                <?php elseif (isset($message)): ?>
+                    <h3 class="p-4 text-lg font-semibold"><?php echo htmlspecialchars($message['date']); ?></h3>
+                    <div class="p-4">
+                        <strong>Sender:</strong>
+                        <p><?php echo htmlspecialchars($message['sender']); ?></p>
+                    </div>
+                    <div class="p-4">
+                        <strong>Message:</strong>
+                        <p><?php echo nl2br(htmlspecialchars($message['message'])); ?></p>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
+    
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
