@@ -1,30 +1,69 @@
 <?php
-$active = isset($_GET['active']) ? $_GET['active'] : '';
+include '../config.php';
 
-$active = htmlspecialchars($active, ENT_QUOTES, 'UTF-8');
+// Initialize variables
+$id = '';
+$exercise = '';
+$reps = '';
+$sets = '';
+$month = '';
+$added_by = '';
+$added_date = '';
 
-switch ($active) {
-    case 'schedules':
-        $url = "../views/admins/viewShedules.php";
-        break;
-    case 'add_schedules':
-        $url = "../views/admins/addShedules.php";
-        break;
-    case 'update_schedules':
-        $url = "../views/admins/addShedules.php";
-        break;
-    case 'inbox':
-        $url = "../views/admins/viewShedules.php";
-        break;
-    case 'attendance':
-        $url = "../views/admins/attendace.php";
-        break;
-    case 'users':
-        $url = "../views/admins/users.php";
-        break;
-    default:
-        $url = "../views/admins/viewShedules.php";
-        break;
+// Check if 'id' is passed in the URL (for editing)
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+    // Fetch schedule details from the database
+    $sql = "SELECT * FROM shedule WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $schedule = $result->fetch_assoc();
+        // Populate the form with existing values
+        $exercise = $schedule['excercise'];
+        $reps = $schedule['reps'];
+        $sets = $schedule['sets'];
+        $month = $schedule['month'];
+        $added_by = $schedule['added_by'];
+        $added_date = $schedule['added_date'];
+    }
+    $stmt->close();
+}
+
+// Check if form is submitted (either to update or add a new schedule)
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $exercise = $_POST['exercise'];
+    $reps = $_POST['reps'];
+    $sets = $_POST['sets'];
+    $month = $_POST['month'];
+    $added_by = $_POST['added_by'];
+    $added_date = date('Y-m-d H:i:s'); // Current timestamp
+
+    if (!empty($_POST['id'])) {
+        // Update existing schedule
+        $sql = "UPDATE shedule SET excercise = ?, reps = ?, sets = ?, month = ?, added_by = ?, added_date = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("siisssi", $exercise, $reps, $sets, $month, $added_by, $added_date, $_POST['id']);
+    } else {
+        // Insert new schedule
+        $sql = "INSERT INTO shedule (excercise, reps, sets, month, added_by, added_date) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("siisss", $exercise, $reps, $sets, $month, $added_by, $added_date);
+    }
+
+    if ($stmt->execute()) {
+        // Redirect after successful save
+        header("Location: admin_dashboard.php");
+        exit();
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    $stmt->close();
 }
 ?>
 
@@ -114,7 +153,49 @@ switch ($active) {
     </aside>
     <div class="p-4 sm:ml-64">
         <div class="p-4 mt-14">
-            <?php include $url; ?>
+        <a href="admin_dashboard.php"><button> <img src="../assets/images/Icon/back.png" alt=""></button></a> 
+        <br>
+        <br>
+            <!-- Schedule Form -->
+            <form method="POST" action="">
+                <input type="hidden" name="id" value="<?php echo htmlspecialchars($id); ?>">
+
+                <div class="mb-5">
+                    <label for="exercise" class="block mb-2 text-sm font-medium text-gray-900">Exercise</label>
+                    <input type="text" id="exercise" name="exercise" value="<?php echo htmlspecialchars($exercise); ?>" class="block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+
+                <div class="mb-5">
+                    <label for="reps" class="block mb-2 text-sm font-medium text-gray-900">Reps</label>
+                    <input type="number" id="reps" name="reps" value="<?php echo htmlspecialchars($reps); ?>" class="block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+
+                <div class="mb-5">
+                    <label for="sets" class="block mb-2 text-sm font-medium text-gray-900">Sets</label>
+                    <input type="number" id="sets" name="sets" value="<?php echo htmlspecialchars($sets); ?>" class="block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+
+                <div class="mb-5">
+                    <label for="month" class="block mb-2 text-sm font-medium text-gray-900">Month</label>
+                    <input type="text" id="month" name="month" value="<?php echo htmlspecialchars($month); ?>" class="block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+
+                <div class="mb-5">
+                    <label for="added_by" class="block mb-2 text-sm font-medium text-gray-900">Added by</label>
+                    <input type="text" id="added_by" name="added_by" value="<?php echo htmlspecialchars($added_by); ?>" class="block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+
+                <div class="mb-5">
+                    <label for="added_date" class="block mb-2 text-sm font-medium text-gray-900">Added Date</label>
+                    <input type="text" id="added_date" name="added_date" value="<?php echo htmlspecialchars($added_date); ?>" disabled class="block w-full p-2 border border-gray-300 rounded-md">
+                </div>
+
+                <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded-md">Save Schedule</button>
+            </form>
+            <br>
+            
+
+
         </div>
     </div>
     </div>

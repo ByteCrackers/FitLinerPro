@@ -1,133 +1,63 @@
+<?php
+include '../config.php';
 
-<div class="flex flex-col items-end" >
-    <button type="button" class="text-white bg-blue-500 hover:bg-blue-80 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700">Add Shedule</button>
-</div>
+// Use the MySQLi connection object
+$query = "SELECT * FROM users";
+$result = $conn->query($query);
+
+if ($result === false) {
+    die("Error: " . $conn->error);
+}
+
+$users = $result->fetch_all(MYSQLI_ASSOC);
+?>
 
 <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md bg-clip-border rounded-xl">
-  <table class="w-full text-left table-auto min-w-max">
-    <thead>
-      <tr>
-        <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-          <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
-            Name
-          </p>
-        </th>
-        <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-          <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
-            Job
-          </p>
-        </th>
-        <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-          <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">
-            Employed
-          </p>
-        </th>
-        <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-          <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70"></p>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="even:bg-blue-gray-50/50">
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            John Michael
-          </p>
-        </td>
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            Manager
-          </p>
-        </td>
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            23/04/18
-          </p>
-        </td>
-        <td class="p-4">
-          <a href="#" class="block font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900">Edit</a>
-        </td>
-      </tr>
-      <tr class="even:bg-blue-gray-50/50">
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            Alexa Liras
-          </p>
-        </td>
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            Developer
-          </p>
-        </td>
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            23/04/18
-          </p>
-        </td>
-        <td class="p-4">
-          <a href="#" class="block font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900">Edit</a>
-        </td>
-      </tr>
-      <tr class="even:bg-blue-gray-50/50">
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            Laurent Perrier
-          </p>
-        </td>
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            Executive
-          </p>
-        </td>
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            19/09/17
-          </p>
-        </td>
-        <td class="p-4">
-          <a href="#" class="block font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900">Edit</a>
-        </td>
-      </tr>
-      <tr class="even:bg-blue-gray-50/50">
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            Michael Levi
-          </p>
-        </td>
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            Developer
-          </p>
-        </td>
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            24/12/08
-          </p>
-        </td>
-        <td class="p-4">
-          <a href="#" class="block font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900">Edit</a>
-        </td>
-      </tr>
-      <tr class="even:bg-blue-gray-50/50">
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            Richard Gran
-          </p>
-        </td>
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            Manager
-          </p>
-        </td>
-        <td class="p-4">
-          <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-            04/10/21
-          </p>
-        </td>
-        <td class="p-4">
-          <a href="#" class="block font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900">Edit</a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+    <table class="w-full text-left table-auto min-w-max">
+        <thead>
+            <tr>
+                <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                    <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">ID</p>
+                </th>
+                <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                    <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Name</p>
+                </th>
+                <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                    <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Role</p>
+                </th>
+                <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                    <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Status</p>
+                </th>
+                <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($users as $user): ?>
+                <tr class="even:bg-blue-gray-50/50">
+                    <td class="p-4">
+                        <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900"><?php echo htmlspecialchars($user['id']); ?></p>
+                    </td>
+                    <td class="p-4">
+                        <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900"><?php echo htmlspecialchars($user['name']); ?></p>
+                    </td>
+                    <td class="p-4">
+                        <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900"><?php echo htmlspecialchars($user['role']); ?></p>
+                    </td>
+                    <td class="p-4">
+                        <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900"><?php echo htmlspecialchars($user['status']); ?></p>
+                    </td>
+                    <td class="p-4">
+                        <div class="max-w-lg mx-auto">
+                            <form action="../views/admins/change_status.php" method="POST">
+                                <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($user['id']); ?>">
+                                <button type="submit" name="status" value="Active" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center">Set Active</button>
+                                <button type="submit" name="status" value="Inactive" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center">Set Inactive</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>
+<script src="https://unpkg.com/@themesberg/flowbite@latest/dist/flowbite.bundle.js"></script>
