@@ -31,8 +31,6 @@ $result = $conn->query($sql);
           <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">Email</th>
           <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">Mark</th>
           <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">Attendance</th>
-          <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">Payment Status</th>
-          <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">Send Warning</th>
         </tr>
       </thead>
       <tbody>
@@ -44,10 +42,6 @@ $result = $conn->query($sql);
               <input type="checkbox" name="attendance[]" value="<?php echo htmlspecialchars($row['id']); ?>">
             </td>
             <td class="p-4"><?php echo htmlspecialchars($row['attendance'] ?? '0'); ?></td>
-            <td class="p-4"><?php echo htmlspecialchars($row['status'] ? $row['status'] : 'Null'); ?></td>
-            <td class="p-4">
-              <a href="#" class="block font-sans text-sm antialiased font-medium leading-normal text-blue-gray-900">Send</a>
-            </td>
           </tr>
         <?php endwhile; ?>
       </tbody>
