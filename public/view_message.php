@@ -1,4 +1,35 @@
 <?php
+// Include database configuration
+include '../config.php';
+
+// Get message ID from the URL
+$messageId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+
+// Fetch message details from the database
+if ($messageId > 0) {
+    $sql = "SELECT id, date, sender, message FROM message WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $messageId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $message = $result->fetch_assoc();
+    } else {
+        $error = "Message not found.";
+    }
+
+    $stmt->close();
+} else {
+    $error = "Invalid message ID.";
+}
+
+$conn->close();
+?>
+
+
+
+<?php
 $active = isset($_GET['active']) ? $_GET['active'] : '';
 
 $active = htmlspecialchars($active, ENT_QUOTES, 'UTF-8');
@@ -110,10 +141,36 @@ switch ($active) {
         </div>
     </aside>
     <div class="p-4 sm:ml-64">
+        
         <div class="p-4 mt-14">
-            <?php include $url; ?>
+            <div class="flex flex-col items-end">
+                <a href="admin_dashboard.php?active=inbox">
+                    <button type="button" class="text-white bg-blue-500 hover:bg-blue-800 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700">
+                        Back to Message List
+                    </button>
+                </a>
+            </div>
+
+            <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md bg-clip-border rounded-xl">
+                <?php if (isset($error)): ?>
+                    <div class="p-4 text-red-600">
+                        <?php echo htmlspecialchars($error); ?>
+                    </div>
+                <?php elseif (isset($message)): ?>
+                    <h3 class="p-4 text-lg font-semibold"><?php echo htmlspecialchars($message['date']); ?></h3>
+                    <div class="p-4">
+                        <strong>Sender:</strong>
+                        <p><?php echo htmlspecialchars($message['sender']); ?></p>
+                    </div>
+                    <div class="p-4">
+                        <strong>Message:</strong>
+                        <p><?php echo nl2br(htmlspecialchars($message['message'])); ?></p>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
+    
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
