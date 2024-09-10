@@ -1,11 +1,9 @@
 
 <?php
-session_start(); // Start the session
+session_start(); 
 
-// Check if there's an error message in the session and store it in a variable
 $error = isset($_SESSION['error']) ? $_SESSION['error'] : '';
 
-// Clear the error message from the session after displaying it
 unset($_SESSION['error']);
 ?>
 <!DOCTYPE html>
@@ -26,7 +24,6 @@ unset($_SESSION['error']);
         <h2 class="p-3 text-2xl font-bold" >Membership Registration</h2>
         <p class="text-gray-600" >Join the FitLinerPro Family: Your Fitness Journey Starts Here!</p>
     </div>
-        <!-- Display error message if any -->
     <?php if (!empty($error)): ?>
       <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
         <?= $error ?>
