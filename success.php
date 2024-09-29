@@ -15,7 +15,8 @@ $userId = $_SESSION['user_id'];
 
 // Prepare to insert payment record
 $paymentId = $checkout_session->payment_intent; // Payment Intent ID
-$amount = $checkout_session->amount_total; // Total amount paid
+// $amount = $checkout_session->amount_total; // Total amount paid
+$amount = 4500; // Total amount paid
 
 // Prepare the SQL statement
 $stmt = $conn->prepare("INSERT INTO payment (user_id, payment_id, payment_date, payment_month, amount) VALUES (?, ?, NOW(), MONTH(NOW()), ?)");
