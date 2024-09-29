@@ -64,16 +64,19 @@ unset($_SESSION['error']);
                   <input id="password" name="password" type="password" required
                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
+                <p id="password-validation-message" class="text-red-500 text-sm hidden"></p>
               </div>
 
               <div class="col-span-full">
-                <label for="about" class="block text-sm font-medium leading-6 text-gray-900">About</label>
+                <label for="confirm-password" class="block text-sm font-medium leading-6 text-gray-900">Confirm Password</label>
                 <div class="mt-2">
-                  <textarea id="about" name="about" rows="3" required
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                  <input id="confirm-password" name="confirm-password" type="password" required
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
-                <p class="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
+                <p id="password-match-message" class="text-red-500 text-sm hidden">Passwords do not match.</p>
               </div>
+
+
             </div>
           </div>
           <br>
@@ -139,6 +142,22 @@ unset($_SESSION['error']);
                 </div>
               </div>
 
+              <div class="sm:col-span-3">
+                <label for="contact-number" class="block text-sm font-medium leading-6 text-gray-900">Contact Number</label>
+                <div class="mt-2">
+                  <input type="number" name="contact-number" id="contact-number" required autocomplete="given-name"
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+              </div>
+
+              <div class="sm:col-span-3">
+                <label for="e-contact-number" class="block text-sm font-medium leading-6 text-gray-900">Emergency Contact Number</label>
+                <div class="mt-2">
+                  <input type="number" name="e-contact-number" id="e-contact-number" required autocomplete="family-name"
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+              </div>
+
               <div class="sm:col-span-2 sm:col-start-1">
                 <label for="birthday" class="block text-sm font-medium leading-6 text-gray-900">Birthday</label>
                 <div class="mt-2">
@@ -184,45 +203,121 @@ unset($_SESSION['error']);
     const prevButtons = document.querySelectorAll('.prev-btn');
     const steps = document.querySelectorAll('.step');
 
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordField = document.getElementById('password');
+        const confirmPasswordField = document.getElementById('confirm-password');
+        const passwordMatchMessage = document.getElementById('password-match-message');
+        const passwordValidationMessage = document.getElementById('password-validation-message');
+
+        // Regular expression for password validation
+        const passwordPattern = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/; // At least one symbol
+        const numberPattern = /(?=(?:.*\d){2})/; // At least two numbers
+        const capitalLetterPattern = /(?=.*[A-Z])/; // At least one capital letter
+
+        passwordField.addEventListener('input', function() {
+            const password = passwordField.value;
+
+            // Check for password requirements
+            let validationMessages = [];
+
+            if (!passwordPattern.test(password)) {
+                validationMessages.push("Password must contain at least one symbol.");
+            }
+            if (!numberPattern.test(password)) {
+                validationMessages.push("Password must contain at least two numbers.");
+            }
+            if (!capitalLetterPattern.test(password)) {
+                validationMessages.push("Password must contain at least one capital letter.");
+            }
+            if (password.length < 6) {
+                validationMessages.push("Password must be at least 6 characters long.");
+            }
+
+            // Show validation messages or hide them
+            if (validationMessages.length > 0) {
+                passwordValidationMessage.innerText = validationMessages.join(' ');
+                passwordValidationMessage.classList.remove('hidden');
+            } else {
+                passwordValidationMessage.classList.add('hidden');
+            }
+
+            // Confirm password validation
+            if (confirmPasswordField.value !== password) {
+                passwordMatchMessage.classList.remove('hidden');
+            } else {
+                passwordMatchMessage.classList.add('hidden');
+            }
+        });
+
+        confirmPasswordField.addEventListener('input', function() {
+            if (confirmPasswordField.value !== passwordField.value) {
+                passwordMatchMessage.classList.remove('hidden');
+            } else {
+                passwordMatchMessage.classList.add('hidden');
+            }
+        });
+    });
+
     let currentStep = 0;
 
     function showStep(stepIndex) {
-      steps.forEach((step, index) => {
-        step.classList.toggle('active', index === stepIndex);
-      });
+        steps.forEach((step, index) => {
+            step.classList.toggle('active', index === stepIndex);
+        });
     }
 
     function updateConfirmation() {
-      document.getElementById('confirmation-email').innerText = 'Email: ' + document.getElementById('email').value;
-      document.getElementById('confirmation-first-name').innerText = 'First Name: ' + document.getElementById('first-name').value;
-      document.getElementById('confirmation-last-name').innerText = 'Last Name: ' + document.getElementById('last-name').value;
-      document.getElementById('confirmation-name-with-initials').innerText = 'Name with Initials: ' + document.getElementById('name-with-initials').value;
-      document.getElementById('confirmation-sex').innerText = 'Sex: ' + document.getElementById('sex').value;
-      document.getElementById('confirmation-marital-status').innerText = 'Marital Status: ' + document.getElementById('marital-status').value;
-      document.getElementById('confirmation-street-address').innerText = 'Address: ' + document.getElementById('street-address').value;
-      document.getElementById('confirmation-birthday').innerText = 'Birthday: ' + document.getElementById('birthday').value;
+        document.getElementById('confirmation-email').innerText = 'Email: ' + document.getElementById('email').value;
+        document.getElementById('confirmation-first-name').innerText = 'First Name: ' + document.getElementById('first-name').value;
+        document.getElementById('confirmation-last-name').innerText = 'Last Name: ' + document.getElementById('last-name').value;
+        document.getElementById('confirmation-name-with-initials').innerText = 'Name with Initials: ' + document.getElementById('name-with-initials').value;
+        document.getElementById('confirmation-sex').innerText = 'Sex: ' + document.getElementById('sex').value;
+        document.getElementById('confirmation-marital-status').innerText = 'Marital Status: ' + document.getElementById('marital-status').value;
+        document.getElementById('confirmation-street-address').innerText = 'Address: ' + document.getElementById('street-address').value;
+        document.getElementById('confirmation-birthday').innerText = 'Birthday: ' + document.getElementById('birthday').value;
     }
 
     nextButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        if (currentStep < steps.length - 1) {
-          currentStep++;
-          showStep(currentStep);
-        }
-        if (currentStep === steps.length - 1) {
-          updateConfirmation();
-        }
-      });
+        button.addEventListener('click', () => {
+            // Validate inputs in the current step
+            const currentInputs = steps[currentStep].querySelectorAll('input[required]');
+            let allFilled = true;
+
+            currentInputs.forEach(input => {
+                if (!input.value) {
+                    allFilled = false;
+                    input.classList.add('border-red-500'); // Add a red border to empty fields
+                } else {
+                    input.classList.remove('border-red-500'); // Remove red border if filled
+                }
+            });
+
+            // Show error message if any field is empty
+            if (!allFilled) {
+                alert("Please fill in all required fields before continuing.");
+                return;
+            }
+
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                showStep(currentStep);
+            }
+            if (currentStep === steps.length - 1) {
+                updateConfirmation();
+            }
+        });
     });
 
     prevButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        if (currentStep > 0) {
-          currentStep--;
-          showStep(currentStep);
-        }
-      });
+        button.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        });
     });
-  </script>
+</script>
+
 </body>
+
 </html>
