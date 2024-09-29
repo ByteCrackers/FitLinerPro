@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($userModel->register($email, $password, $firstName, $lastName, $nameWithInitials, $sex, $maritalStatus, $address, $birthday, $age, $height, $weight, $about, $exerciseLocation, $participatedInSports, $currentlyDoingSports, $exerciseDuration)) {
             $_SESSION['success'] = 'Registration successful. Please log in.';
-            header("Location: ../index.php");
+            header("Location: ../public/reg_suc.php");
             exit();
         } else {
             $_SESSION['error'] = 'Registration failed: ' . $userModel->getLastError();
