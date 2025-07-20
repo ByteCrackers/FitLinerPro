@@ -17,8 +17,8 @@ $stripe_secret_key = "sk_test_51Q4NQ32K72b2EFxnSh2MQLjhUcnXZqIusV20ntGichWD5EwSX
 
 $checkout_session = \Stripe\Checkout\Session::create([
     "mode" => "payment",
-    "success_url" => "http://localhost/FitLinerPro/success.php?session_id={CHECKOUT_SESSION_ID}",
-    "cancel_url" => "http://localhost/FitLinerPro/index.php",
+    "success_url" => "http://localhost:8081/FitLinerPro/success.php?session_id={CHECKOUT_SESSION_ID}",
+    "cancel_url" => "http://localhost:8081/FitLinerPro/index.php",
     "locale" => "auto",
     "line_items" => [
         [
