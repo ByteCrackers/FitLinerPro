@@ -1,5 +1,5 @@
 <?php
-include '../config.php';
+include '../admin-config.php';
 
 // Use the MySQLi connection object
 $query = "SELECT * FROM users";

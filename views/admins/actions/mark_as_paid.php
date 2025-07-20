@@ -1,5 +1,5 @@
 <?php 
-include '../../../config.php';
+include '../../../admin-config.php';
 
 if (isset($_GET['id'])) {
     $userId = intval($_GET['id']);

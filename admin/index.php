@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'config.php';
+require '../config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $conn->real_escape_string($_POST['email']);
@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($admin['password'] === $password) {
             $_SESSION['admin_id'] = $admin['admin_id'];
             $_SESSION['fName'] = $admin['fName'];
+            $_SESSION['user_role'] = 'admin';
             header("Location: ../public/admin_dashboard.php");
             exit();
         } else {

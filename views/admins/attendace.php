@@ -1,6 +1,6 @@
 <?php
 // Include database configuration
-include('../config.php');
+include('../admin-config.php');
 
 // Get today's date
 $today_date = date('d/m/Y');

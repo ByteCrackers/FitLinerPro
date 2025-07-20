@@ -1,5 +1,5 @@
 <?php
-include '../config.php';
+include '../admin-config.php';
 
 // Check if the current day is within the first 10 days of the month
 $currentDay = date('j'); // 'j' returns the day of the month without leading zeros

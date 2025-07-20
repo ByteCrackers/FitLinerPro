@@ -1,6 +1,6 @@
 <?php
 // Include database configuration
-include '../../../config.php';
+include '../../../admin-config.php';
 
 // Initialize variables
 $sender = $message = '';
