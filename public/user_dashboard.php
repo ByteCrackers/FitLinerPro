@@ -1,6 +1,6 @@
 <?php
 
-session_start(); // Start the session
+session_start(); // Start the session 
 
 // Check if the user is logged in by verifying if 'user_id' exists in the session
 if (!isset($_SESSION['user_id'])) {
@@ -68,7 +68,8 @@ if (!isset($_SESSION['user_id'])) {
               <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
                 <ul
                   class="flex flex-col font-medium p-4 md:p-0 mt-4  rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white ">
-                  Next payment:
+                  <?php $myDate = date("d-m-y");
+                  echo $myDate; ?>
                 </ul>
               </div>
             </div>
@@ -81,29 +82,7 @@ if (!isset($_SESSION['user_id'])) {
         <!--Table Starts Here-->
         <div class="w-full pt-0 pr-4 pb-0 pl-4 mt-0 mr-auto mb-8 ml-auto border-2 rounded-2xl lg:mb-0">
           <div class="mt-0 mr-auto mb-0 ml-auto max-w-5xl overflow-x-auto overflow-y-hidden">
-            <div class="border-b border-gray-200 dark:border-neutral-700">
-              <nav class="-mb-0.5 flex justify-end space-x-6" aria-label="Tabs" role="tablist"
-                aria-orientation="horizontal">
-                <button type="button"
-                  class="hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600 py-4 px-1 inline-flex items-center gap-x-2 border-b-2 border-transparent text-sm whitespace-nowrap text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-blue-500 active"
-                  id="horizontal-right-alignment-item-1" aria-selected="true"
-                  data-hs-tab="#horizontal-right-alignment-1" aria-controls="horizontal-right-alignment-1" role="tab">
-                  Program 01
-                </button>
-                <button type="button"
-                  class="hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600 py-4 px-1 inline-flex items-center gap-x-2 border-b-2 border-transparent text-sm whitespace-nowrap text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-blue-500"
-                  id="horizontal-right-alignment-item-2" aria-selected="false"
-                  data-hs-tab="#horizontal-right-alignment-2" aria-controls="horizontal-right-alignment-2" role="tab">
-                  Program 02
-                </button>
-                <button type="button"
-                  class="hs-tab-active:font-semibold hs-tab-active:border-blue-600 hs-tab-active:text-blue-600 py-4 px-1 inline-flex items-center gap-x-2 border-b-2 border-transparent text-sm whitespace-nowrap text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-400 dark:hover:text-blue-500"
-                  id="horizontal-right-alignment-item-3" aria-selected="false"
-                  data-hs-tab="#horizontal-right-alignment-3" aria-controls="horizontal-right-alignment-3" role="tab">
-                  Program 03
-                </button>
-              </nav>
-            </div>
+
 
             <div class="mt-3">
               <div id="horizontal-right-alignment-1" role="tabpanel"
@@ -111,126 +90,15 @@ if (!isset($_SESSION['user_id'])) {
                 <p class="text-gray-500 dark:text-neutral-400">
 
                 <div id="currentRow">
-                  <div class="w-full rounded-2xl pr-4 pl-4 border-2">
-                    <div class="container mt-0 mr-auto mb-0 ml-auto">
-                      <div class="flex flex-wrap justify-evenly">
-                        <div class="w-full pt-4 pr-4 pb-4 pl-4 sm:w-1/2 lg:w-1/3">
-                          <div class="bg-gray-800 shadow w-full rounded-lg pt-6 pr-6 pb-6 pl-6">
-                            <div class="w-full flex justify-between mb-2">
-                              <div class="flex flex-col justify-evenly items-end">
-                                <p class="text-gray-200 text-xl font-bold text-end whitespace-nowrap">15 Reps</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="w-full pt-4 pr-4 pb-4 pl-4 sm:w-1/2 lg:w-1/3">
-                          <div class="bg-gray-800 shadow w-full rounded-lg pt-6 pr-6 pb-6 pl-6">
-                            <div class="flex justify-between mb-2">
-                              <div class="flex flex-col justify-evenly items-end text-white">
-                                <p class="text-gray-200 text-xl font-bold text-end whitespace-nowrap">3 Sets</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="w-full pt-4 pr-4 pb-4 pl-4 sm:w-1/2 lg:w-1/3">
-                          <div class="rounded-lg shadow bg-white pt-6 pr-6 pb-6 pl-6">
-                            <div class="flex justify-between mb-2">
-                              <div class="flex items-end flex-col justify-evenly">
-                                <p class="text-gray-800 text-xl font-bold text-end whitespace-nowrap">Week 3</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <table class="w-full table-auto mt-0 mr-0 mb-8 ml-0">
-                    <tbody>
-                      <!-- Current row to be removed -->
-                      <tr class="text-base rounded-3xl shadow-xl">
-                        <td class="pt-5 pr-0 pb-5 pl-10 text-base hidden lg:block">Exercise</td>
-                      </tr>
-                    </tbody>
-                    <tr id="currentRow" class="text-base rounded-3xl">
-                      <td class="pt-5 pr-0 pb-5 pl-10 text-base hidden lg:block">
-                        <p>
-                          <a id="markCompleteLink"
-                            class="text-blue-600 hover:text-blue-500 decoration-2 hover:underline focus:outline-none focus:underline opacity-90"
-                            href="javascript:void(0);">Mark as completed</a>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+                  <?php include '../views/users/programs.php' ?>
                 </div>
 
                 <!-- Second row, initially hidden -->
-                <div id="secondRow" class="overflow-hidden w-full rounded-2xl pr-4 pl-4 border-2"
-                  style="display: none;">
-                  <div class="container mt-0 mr-auto mb-0 ml-auto">
-                    <div class="flex flex-wrap justify-evenly">
-                      <div class="w-full pt-4 pr-4 pb-4 pl-4 sm:w-1/2 lg:w-1/3">
-                        <div class="bg-gray-800 shadow w-full rounded-lg pt-6 pr-6 pb-6 pl-6">
-                          <div class="w-full flex justify-between mb-2">
-                            <div class="flex flex-col justify-evenly items-end">
-                              <p class="text-gray-200 text-xl font-bold text-end whitespace-nowrap">15 Reps</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="w-full pt-4 pr-4 pb-4 pl-4 sm:w-1/2 lg:w-1/3">
-                        <div class="bg-gray-800 shadow w-full rounded-lg pt-6 pr-6 pb-6 pl-6">
-                          <div class="flex justify-between mb-2">
-                            <div class="flex flex-col justify-evenly items-end text-white">
-                              <p class="text-gray-200 text-xl font-bold text-end whitespace-nowrap">3 Sets</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="w-full pt-4 pr-4 pb-4 pl-4 sm:w-1/2 lg:w-1/3">
-                        <div class="rounded-lg shadow bg-white pt-6 pr-6 pb-6 pl-6">
-                          <div class="flex justify-between mb-2">
-                            <div class="flex items-end flex-col justify-evenly">
-                              <p class="text-gray-800 text-xl font-bold text-end whitespace-nowrap">Week 4</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <table class="w-full table-auto mt-0 mr-0 mb-8 ml-0">
-                    <tbody>
-                      <!-- Current row to be removed -->
-                      <tr class="text-base rounded-3xl shadow-xl">
-                        <td class="pt-5 pr-0 pb-5 pl-10 text-base hidden lg:block">Exercise</td>
-                      </tr>
-                    </tbody>
-                    <tr id="currentRow" class="text-base rounded-3xl">
-                      <td class="pt-5 pr-0 pb-5 pl-10 text-base hidden lg:block">
-                        <p>
-                          <a id="markCompleteLink"
-                            class="text-blue-600 hover:text-blue-500 decoration-2 hover:underline focus:outline-none focus:underline opacity-90"
-                            href="javascript:void(0);">Mark as completed</a>
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
 
                 </p>
               </div>
 
-              <div id="horizontal-right-alignment-2" class="hidden" role="tabpanel"
-                aria-labelledby="horizontal-right-alignment-item-2">
-                <p class="text-gray-500 dark:text-neutral-400">
-                  This is the <em class="font-semibold text-gray-800 dark:text-neutral-200">second</em> item's tab body.
-                </p>
-              </div>
-              <div id="horizontal-right-alignment-3" class="hidden" role="tabpanel"
-                aria-labelledby="horizontal-right-alignment-item-3">
-                <p class="text-gray-500 dark:text-neutral-400">
-                  This is the <em class="font-semibold text-gray-800 dark:text-neutral-200">third</em> item's tab body.
-                </p>
-              </div>
+
             </div>
 
           </div>
@@ -241,7 +109,7 @@ if (!isset($_SESSION['user_id'])) {
         <div class="h-full flex flex-col justify-between container">
           <div class="bg-white rounded-2xl flex flex-col w-full pt-5 pr-6 pb-5 pl-6 border-2">
             <div class="flex items-center justify-between mb-4">
-              <p class="text-xl font-bold">Total compleated</p>
+              <p class="text-xl font-bold">Shedules</p>
               <p class="pt-1 pr-1 pb-1 pl-1 border-2 rounded-md">
                 <svg width="1.25rem" height="1.25rem" viewBox="0 0 512 512" data-name="Layer 1" id="Layer_1"
                   xmlns="http://www.w3.org/2000/svg">
@@ -255,10 +123,46 @@ if (!isset($_SESSION['user_id'])) {
             <div data_type="radial" class="pt-0 pr-2 pb-0 pl-2 chart w-full"></div>
             <div class="text-center">
               <div class="flex items-end justify-center mb-2">
-                <p class="text-4xl font-bold text-gray-800">3</p>
+                <p class="text-4xl font-bold text-gray-800">
+                  <?php
+
+                  $userID = $_SESSION['user_id'];
+
+                  // SQL query to fetch the count
+                  $sql = "SELECT count FROM program_comp WHERE user_id = ? ";
+
+                  // Prepare and bind
+                  if ($stmt = $conn->prepare($sql)) {
+                    // Bind the parameters (integers in this case)
+                    $stmt->bind_param("i", $userID);
+
+                    // Execute the query
+                    $stmt->execute();
+
+                    // Bind the result
+                    $stmt->bind_result($count);
+
+                    // Fetch the result
+                    if ($stmt->fetch()) {
+                      // Output the count from the database
+                      echo $count;
+                    } else {
+                      echo 0;
+                    }
+
+                    // Close the statement
+                    $stmt->close();
+                  } else {
+                    // Error in query preparation
+                    echo "Error preparing the query: " . $conn->error;
+                  }
+
+                  ?>
+
+
+                </p>
               </div>
               <div class="text-center flex items-center justify-Center">
-                <p class="text-sm font-medium text-gray-500 mr-2">Weeks</p>
                 <p class="rounded-full text-xs text-green-500 bg-green-50 pt-1 pr-2 pb-1 pl-2">Compleated</p>
               </div>
             </div>
@@ -266,6 +170,24 @@ if (!isset($_SESSION['user_id'])) {
 
           <?php include '../views/users/r_payments.php' ?>
 
+
+
+          <?php 
+          
+          // Count the number of days with "attend" status
+          $sql = "SELECT COUNT(*) as count FROM attendance WHERE user_id = ? AND status = 'attend'";
+          $stmt = $conn->prepare($sql);
+          $stmt->bind_param("i", $userID);
+          $stmt->execute();
+          $result = $stmt->get_result();
+          $row = $result->fetch_assoc();
+          
+          $attend_count = $row['count'];
+          $total_days = 208;
+          $attendance_percentage = ($attend_count / $total_days) * 100;
+          
+          
+          ?>
 
           <div class="rounded-2xl border-2">
             <div class="mt-4 mr-0 mb-0 ml-0 w-full">
@@ -278,25 +200,25 @@ if (!isset($_SESSION['user_id'])) {
                     <div class="flex items-center justify-between w-full mb-2">
                       <p class="text-base font-medium">Attendance</p>
                       <div class="flex items-center">
-                        <p class="text-sm">90%</p>
+                        <p class="text-sm"><?php echo number_format($attendance_percentage, 2); ?>%</p>
                       </div>
                     </div>
                     <div class="w-full">
                       <div class="mt-0 mr-0 mb-1 ml-0 h-1 w-full bg-gray-300 rounded">
-                        <div class="h-1 w-8/12 bg-gray-800 rounded"></div>
+                        <div class="h-1" style="width: <?php echo $attendance_percentage; ?>%; background-color: #4A5568;" class="rounded"></div>
                       </div>
                     </div>
                   </div>
                   <div class="flex items-center flex-col mt-0 mr-0 mb-8 ml-0">
                     <div class="flex items-center justify-between w-full mb-2">
-                      <p class="text-base font-medium">Compleated</p>
+                      <p class="text-base font-medium">Completed</p>
                       <div class="flex items-center">
-                        <p class="text-sm">90%</p>
+                        <p class="text-sm"><?php echo $count?>%</p>
                       </div>
                     </div>
                     <div class="w-full">
                       <div class="mt-0 mr-0 mb-1 ml-0 h-1 w-full bg-gray-300 rounded">
-                        <div class="h-1 w-8/12 bg-gray-800 rounded"></div>
+                        <div class="h-1" style="width: <?php echo $count; ?>%; background-color: #4A5568;" class="rounded"></div>
                       </div>
                     </div>
                   </div>
@@ -312,6 +234,8 @@ if (!isset($_SESSION['user_id'])) {
               </div>
             </div>
           </div>
+
+
         </div>
       </div>
     </div>
@@ -367,6 +291,28 @@ if (!isset($_SESSION['user_id'])) {
 
       // Show the second row
       document.getElementById('secondRow').style.display = 'block';
+    });
+
+    //complete
+    document.getElementById('markCompleteLink').addEventListener('click', function() {
+      const programId = 1; // Example: You can pass the program ID dynamically
+      const currentWeek = <?php echo $currentWeek; ?>; // Assuming you have a variable for the current week
+
+      let weekField = `w${currentWeek}`; // Dynamically set the week (w1, w2, etc.)
+
+      // AJAX request to send data to PHP
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "updateWeek.php", true);
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.onload = function() {
+        9
+        if (xhr.status === 200) {
+          alert(xhr.responseText); // Show response message
+        }
+      };
+
+      // Sending user_id, program_id, and week as POST data
+      xhr.send(`week=${weekField}&program_id=${programId}`);
     });
   </script>
 

@@ -183,6 +183,7 @@ class User
               <body>
                 <h1>Your account has been created successfully.</h1>
                 <p>Please use the following credentials to log in to the system:</p>
+                <p>Login URL: https://flp.sathira.pw</p>
                 <p><strong>ID:</strong> $id</p>
                 <p><strong>Username:</strong> $user</p>
                 <p><strong>Password:</strong> $password</p>
