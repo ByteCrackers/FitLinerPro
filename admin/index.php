@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($admin['password'] === $password) {
             $_SESSION['admin_id'] = $admin['admin_id'];
             $_SESSION['fName'] = $admin['fName'];
-            header("Location: admin_dashboard.php");
+            header("Location: ../public/admin_dashboard.php");
             exit();
         } else {
             $error = "Invalid password.";
