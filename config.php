@@ -1,8 +1,8 @@
 <?php
-define('DB_HOST', '132.145.56.110');
-define('DB_USER', 'lolc-life');        
-define('DB_PASS', 'Y8JcgU6t1APy3JQ');            
-define('DB_NAME', 'fitlinerpro'); 
+define('DB_HOST', 'IP_HERE');
+define('DB_USER', 'DB_USER');        
+define('DB_PASS', 'DB_PASSWORD');            
+define('DB_NAME', 'DB_NAME'); 
 
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
